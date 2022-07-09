@@ -1,0 +1,30 @@
+Credit Card Information;Applications sometimes disclose sensitive financial information such as credit card numbers.;1;(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|(?<mastercard>5[1-5][0-9]{14})|(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|(?<amex>3[47][0-9]{13})|(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}));Multiple
+Oracle Databases Error;Applications may use Oracle Database and the response has error message which is related Oracle Databases.;3;ORA-([0-9]*[0-9]);Multiple
+JWT Token;Some Application use JWT Token for authentication systems. Sensitive Data Analyzer found that token and the token may be forgetten or inclued sensitive information.;0;eyJh([A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*);Multiple
+Private IP Disclosure;Applications sometimes disclose sensitive information such as private IP;0;(192\.168\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]|)\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]))|(172\.([1][6-9]|[2][0-9]|[3][0-1])\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9])\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5]))|(10\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]|)\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9])\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]))|(127\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]|)\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9])\.([0-2][0-5][0-5]|[0-9][0-9]|[0-9]));Multiple
+HTML Comment;Html Comments sometimes disclose sensitive informations.;0;<!--(.*?)-->;Multiple
+Token Variable;Token Information Found;0;((token|Token)(\:|\=)(.*(\ |\n|\t)));Multiple
+Username Variable;Username Found;0;((username|Username)(\:|\=)(.*(\ |\n|\t)));Multiple
+Password Variable;Password Found;0;((password|Password)(\:|\=)(.*(\ |\n|\t)));Multiple
+Email Variable;Email Found;0;((.*)@(.*)\.(com));Multiple
+Java Error Found;Java Error is found;2;(?m)^.*?Exception.*(?:\R+^\s*at .*)+;Active
+ASP.NET;ASP.NET Error Found;1;([A-Za-z]{1,32}\.)+[A-Za-z]{0,32}\(([A-Za-z0-9]+\s+[A-Za-z0-9]+[,\s]*)*\)\s+\+{1}\d+;Active
+ASP.NET;ASP.NET Error Found;1;"Message":"Invalid web service call;Active
+ASP.NET;ASP.NET Error Found;1;Exception of type;Active
+ASP.NET;ASP.NET Error Found;1;--- End of inner exception stack trace ---;Active
+ASP.NET;ASP.NET Error Found;1;Microsoft OLE DB Provider;Active
+ASP.NET;ASP.NET Error Found;1;Error ([\d-]+) \([\dA-Fa-f]+\);Active
+ASP.NET;ASP.NET Error Found;1;\bat ([a-zA-Z0-9_]*\.)*([a-zA-Z0-9_]+)\([a-zA-Z0-9, \[\]\&\;]*\);Active
+ASP.NET;ASP.NET Error Found;1;([A-Za-z]{1,32}\.)+[A-Za-z]{0,32}Exception:;Active
+ASP.NET;ASP.NET Error Found;1;in [A-Za-z]:\\([A-Za-z0-9_]+\\)+[A-Za-z0-9_\-]+(\.aspx)?\.cs:line [\d]+;Active
+ASP.NET;ASP.NET Error Found;1;Syntax error in string in query expression;Active
+Java;Java Error Found;1;\.java:[0-9]+;Active
+Java;Java Error Found;1;\.java\((Inlined )?Compiled Code\);Active
+Java;Java Error Found;1;\.invoke\(Unknown Source\);Active
+Java;Java Error Found;1;nested exception is;Active
+Java;Java Error Found;1;\.lang\.([A-Za-z0-9_])+\.([A-Za-z0-9_]+)Exception;Active
+Java;Java Error Found;1;\.lang\.([A-Za-z0-9_]+)Exception;Active
+PHP;PHP Error Found;1;\.php on line [0-9]+;Active
+PHP;PHP Error Found;1;\.php</b> on line <b>[0-9]+;Active
+PHP;PHP Error Found;1;Fatal error:;Active
+PHP;PHP Error Found;1;\.php:[0-9]+;Active
