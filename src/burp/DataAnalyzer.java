@@ -12,7 +12,7 @@ public class DataAnalyzer {
 	
 	public List<List> checkMatches(String response, String match, String name) {
 		
-		List<List> listOfMixedTypes = new ArrayList<List>();
+		List<List> listOfMixedTypes = new ArrayList<>();
 		List<String> listOfStrings = new ArrayList<>();
 		List<int[]> matches = new ArrayList<>();
 		String mydata = response;
@@ -21,12 +21,11 @@ public class DataAnalyzer {
         while (matcher.find()) {
         	int  counter = 0;
             matches.add(new int[]{matcher.start(0), matcher.end(0)});
-           
-            if(name.equals("Credit Card"))  {
+            if(name.equals("Credit Card Information"))  {
             	if (matcher.group("visa") != null) {
             		listOfStrings.add("visa: " + matcher.group(counter));
 				} else if (matcher.group("mastercard") != null) {
-					listOfStrings.add("mastercard:" + matcher.group(counter));
+					listOfStrings.add("mastercard: " + matcher.group(counter));
 				} else if (matcher.group("discover") != null) {
 					listOfStrings.add("discover: " + matcher.group(counter));
 				} else if (matcher.group("amex") != null) {

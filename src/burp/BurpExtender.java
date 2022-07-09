@@ -1,6 +1,11 @@
 package burp;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -17,59 +22,81 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	private IExtensionHelpers helpers;
 	List<IssueList> listIssues;
 	DataAnalyzer checking;
+	private IssueList issue;
+	private byte[]  md5hash;
 
-	public BurpExtender() {
-		this.listIssues = new ArrayList<>(1);
-		String regexCreditCard = "(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|" +
-			    "(?<mastercard>5[1-5][0-9]{14})|" +
-			    "(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|" +
-			    "(?<amex>3[47][0-9]{13})|" +
-			    "(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|" +
-			    "(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))";
-		String regexPrivateIP = "(192\\.168\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5]))|(172\\.([1][6-9]|[2][0-9]|[3][0-1])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5]))|(10\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5]))|(127\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5])\\.([0-9]|[0-9][0-9]|[0-2][0-5][0-5]))";
-		String regexJWTToken = "eyJh([A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*)";
-		String regexHtmlComment = "<!--(.*?)-->";
-		String regexToken = "(token|Token)(\\:|\\=)(.*?) ";
-		String regexUsername = "(username|Username)(\\:|\\=)(.*?) ";
-		String regexPassword = "(password|Password)(\\:|\\=)(.*?) ";
-		this.listIssues.add(new IssueList("Credit Card","Credit Card Information Found",3,regexCreditCard));
-		this.listIssues.add(new IssueList("Oracle Databases","Oracle Database Error Found",3,"ORA-"));
-		this.listIssues.add(new IssueList("JWT Token","JWT Token Found",2,regexJWTToken));
-		this.listIssues.add(new IssueList("Private IP","Private IP Found",1,regexPrivateIP));
-		this.listIssues.add(new IssueList("HTML","Html Comment Found",1,regexHtmlComment));
-		this.listIssues.add(new IssueList("Token","Token Information Found",1,regexToken));
-		this.listIssues.add(new IssueList("Username","Username Found",1,regexUsername));
-		this.listIssues.add(new IssueList("Password","Password Found",1,regexPassword));
-		this.checking = new DataAnalyzer();
-	}
-	
+
     public static void main(String[] args) {
-        BurpExtender b = new BurpExtender();
+       // BurpExtender b = new BurpExtender();
 
     }
 	
 	public void registerExtenderCallbacks(IBurpExtenderCallbacks paramIBurpExtenderCallbacks) {
-		BurpExtender burp = new BurpExtender();
 		this.callbacks = paramIBurpExtenderCallbacks;
 		this.helpers = paramIBurpExtenderCallbacks.getHelpers();
 		paramIBurpExtenderCallbacks.setExtensionName("Sensitive Data Analyzer");
 		this.mStdOut = new PrintWriter(paramIBurpExtenderCallbacks.getStdout(), true);
 		this.mStdErr = new PrintWriter(paramIBurpExtenderCallbacks.getStderr(), true);
-		this.callbacks.registerScannerCheck(this); 
+		//BurpExtender burp = new BurpExtender();
+		this.callbacks.registerScannerCheck(this);
+		this.issue = new IssueList();
+		this.md5hash = null;
+		generateIssue();
+		this.checking = new DataAnalyzer();
 	}
+	
+	public byte[] calculateMd5(String file) throws NoSuchAlgorithmException, IOException {
+		
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		InputStream is = Files.newInputStream(Paths.get(file));
+		DigestInputStream dis = new DigestInputStream(is, md);
+		return md.digest();
+	}
+	
+	public void checkFileChange() {
+		
+		try {
+			byte[] digest = calculateMd5(System.getProperty("user.dir")+"/regexList.txt");
+			if (this.md5hash != digest) {
+				generateIssue();
+			} 
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
 
-	@Override
-	public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
-		// TODO Auto-generated method stub
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+	}
+	
+	public void generateIssue() {
+		try {
+			this.listIssues = issue.generateIssue(System.getProperty("user.dir")+"/regexList.txt");
+			mStdOut.println("Your regexList.txt is loaded.");
+			this.md5hash = calculateMd5(System.getProperty("user.dir")+"/regexList.txt");
+		} catch (Exception e) {
+			// TODO: handle exception
+			mStdErr.println("Error: " + e);
+			mStdErr.println("You need to add file under user directory and the file is must to named regexList.txt.\nYour user director is: " + System.getProperty("user.dir"));
+		}
+	}
+	
+	public List<IScanIssue> findIssues(IHttpRequestResponse baseRequestResponse, String scanType){
 		
 		String match;
 		List<IScanIssue> issues = new ArrayList<>(1);
-		int counter = 0;
 		for (int i = 0; i < this.listIssues.size(); i++) {
+			
+			if (listIssues.get(i).getScanType().equals(scanType) || listIssues.get(i).getScanType().equals("Multiple") ) {
+				
 			List<List> listOfMixedTypes = this.checking.checkMatches(new String(baseRequestResponse.getResponse()),listIssues.get(i).getRegex(),listIssues.get(i).getName());
 			List<String> listOfStrings = listOfMixedTypes.get(0);
 			List<int[]> matches = listOfMixedTypes.get(1);
 			 if (matches.size() > 0) {
+
 				 String severity = "Information";
 	             if (this.listIssues.get(i).getSeverity() == 1) {
 	                	severity = "Low";
@@ -84,6 +111,8 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	                    
 	                    for (int j = 0; j < matches.size(); j++) {
 	                    	String result = listOfStrings.get(j);
+	                    	result = result.replaceAll("<","&lt;");
+	                    	result = result.replaceAll(">","&gt;");
 	                    	mathcResult = String.valueOf(mathcResult) + "<li>" + result + "</li>";
 	                    }
 	                    match = String.valueOf(mathcResult) + "</ul>";
@@ -91,26 +120,56 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	                	this.mStdOut.println("Error here: " + e.getMessage());
 	                	match = String.valueOf(mathcResult) + "<br> <b>Error:</b><i> " + e.getMessage().toString() + "</i>";
 	                }
-	                issues.add(new CustomScanIssue(baseRequestResponse.getHttpService(), this.helpers.analyzeRequest(baseRequestResponse).getUrl(), new IHttpRequestResponse[]{this.callbacks.applyMarkers(baseRequestResponse, (List) null, matches)}, "Sensitive Data Analyser - "+this.listIssues.get(i).getName(), "<b>This response contains:</b> " + match+ listIssues.get(i).getRegex() + "<br/><b>It's Description:</b> " + this.listIssues.get(i).getDetail(), severity));
+	                
+	                String desc = String.valueOf(match) + "<br/><b>It's Description:</b> " + this.listIssues.get(i).getDetail();
+	                //mStdOut.println(counter + ". The result: " + match);
+	                issues.add(new CustomScanIssue(baseRequestResponse.getHttpService(), this.helpers.analyzeRequest(baseRequestResponse).getUrl(), new IHttpRequestResponse[]{this.callbacks.applyMarkers(baseRequestResponse, (List) null, matches)}, "Sensitive Data Analyser - "+this.listIssues.get(i).getName(), desc , severity));
 	                //this.callbacks.addScanIssue(issues.get(counter));
-	                counter++;
 			 }
 		}
-		
-		if (counter > 0) {
-			return issues;
-		} 
-		
-		return null;
+			}
+		return issues;
 		
 	}
 
+	@Override
+	public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
+		// TODO Auto-generated method stub
+		
+		checkFileChange();
+		
+		if (this.listIssues.size() == 0) {
+			mStdErr.println("Issue List couldn't create. Your regexList.txt may be empty or not inclued valid context.\nEach line need to seperate 4 columns such as <Found name>;<Found Details>;<Found Severity(0,1,2,3)>;<Found Regex>;<Found ScanType(Passive,Active,Multiple)>");
+			return null;
+		} else {
+			List<IScanIssue> issues = findIssues(baseRequestResponse,"Passive");
+			if (issues.size() > 0) {
+				return issues;
+			} else {
+				return null;
+			}
+		}
+		
+		
+	}
 
 	@Override
 	public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse,
 			IScannerInsertionPoint insertionPoint) {
+		
+		checkFileChange();
 		// TODO Auto-generated method stub
-		return null;
+		if (this.listIssues.size() == 0) {
+			mStdErr.println("Issue List couldn't create. Your regexList.txt may be empty or not inclued valid context.\nEach line need to seperate 4 columns such as <Found name>;<Found Details>;<Found Severity(0,1,2,3)>;<Found Regex>;<Found ScanType(Passive,Active,Multiple)>");
+			return null;
+		} else {
+			List<IScanIssue> issues = findIssues(baseRequestResponse,"Active");
+			if (issues.size() > 0) {
+				return issues;
+			} else {
+				return null;
+			}
+		}
 	}
 
 
