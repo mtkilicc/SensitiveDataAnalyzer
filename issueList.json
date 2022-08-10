@@ -1,0 +1,49 @@
+{
+    "data": [
+        {
+            "Confidence": "Certain",
+            "Description": "Applications sometimes disclose sensitive financial information such as credit card numbers.",
+            "Name": "Credit Card Information",
+            "Payload": "",
+            "Regex": "(5[1-5][0-9]{14})",
+            "ScanType": "Passive",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Firm",
+            "Description": "Applications may use Oracle Database and the response has error message which is related Oracle Databases.",
+            "Name": "Oracle Databases Error",
+            "Payload": "",
+            "Regex": "ORA-([0-9]*[0-9])",
+            "ScanType": "Passive",
+            "Severity": "High"
+        },
+        {
+            "Confidence": "Firm",
+            "Description": "PHP Error Found",
+            "Name": "PHP3",
+            "Payload": "heretrytest%22",
+            "Regex": "\\\\.php:[0-9]+",
+            "ScanType": "Active",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Firm",
+            "Description": "PHP Error Found",
+            "Name": "PHP2",
+            "Payload": "heretrytest%00",
+            "Regex": "Fatal error:",
+            "ScanType": "Active",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Firm",
+            "Description": "ASP.NET Error Found",
+            "Name": "ASP.NET3",
+            "Payload": "heretrytest%22",
+            "Regex": "--- End of inner exception stack trace ---",
+            "ScanType": "Active",
+            "Severity": "Low"
+        }
+    ]
+}
