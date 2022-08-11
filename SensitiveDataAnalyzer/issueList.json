@@ -20,28 +20,46 @@
         },
         {
             "Confidence": "Firm",
+            "Description": "Html Comments sometimes disclose sensitive informations.",
+            "Name": "HTML Comment",
+            "Payload": "",
+            "Regex": "<!--(.*?)-->",
+            "ScanType": "Passive",
+            "Severity": "Information"
+        },
+        {
+            "Confidence": "Firm",
+            "Description": "Some Application use JWT Token for authentication systems. Sensitive Data Analyzer found that token and the token may be forgetten or inclued sensitive information.",
+            "Name": "JWT Token",
+            "Payload": "",
+            "Regex": "eyJh([A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*)",
+            "ScanType": "Passive",
+            "Severity": "Information"
+        },
+        {
+            "Confidence": "Firm",
             "Description": "PHP Error Found",
-            "Name": "PHP3",
-            "Payload": "heretrytest%22",
+            "Name": "PHP",
+            "Payload": "%22",
             "Regex": "\\\\.php:[0-9]+",
             "ScanType": "Active",
             "Severity": "Low"
         },
         {
             "Confidence": "Firm",
-            "Description": "PHP Error Found",
-            "Name": "PHP2",
-            "Payload": "heretrytest%00",
-            "Regex": "Fatal error:",
+            "Description": "ASP.NET Error Found",
+            "Name": "ASP.NET",
+            "Payload": "<",
+            "Regex": "--- End of inner exception stack trace ---",
             "ScanType": "Active",
             "Severity": "Low"
         },
         {
             "Confidence": "Firm",
-            "Description": "ASP.NET Error Found",
-            "Name": "ASP.NET3",
-            "Payload": "heretrytest%22",
-            "Regex": "--- End of inner exception stack trace ---",
+            "Description": "Java Error Found",
+            "Name": "Java",
+            "Payload": "%00",
+            "Regex": "\\\\.lang\\\\.([A-Za-z0-9_])+\\\\.([A-Za-z0-9_]+)Exception",
             "ScanType": "Active",
             "Severity": "Low"
         }
