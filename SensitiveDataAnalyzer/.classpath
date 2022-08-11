@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_211]"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/runnable"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/muhammed/Desktop/Pentest/Tools/Burp/Eclipse_Jar/org.json.jar"/>
-	<classpathentry kind="lib" path="/Users/muhammed/Desktop/Pentest/Tools/Burp/Eclipse_Jar/sqlite-jdbc-3.36.0.3.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
