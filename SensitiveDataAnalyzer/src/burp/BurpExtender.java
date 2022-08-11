@@ -13,6 +13,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import org.json.*;
 
@@ -25,7 +26,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	List<Issue> passiveIssues;
 	List<Issue> activeIssues;
 	DbUtils dbRunner;
-	private byte[]  md5hash;
+	String md5hash;
 
 
     public static void main(String[] args) {
@@ -68,7 +69,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 			mStdErr.println("generateIssuesList:" + e.getMessage());
 		}
 		try {
-			//calculateMd5(StringUtils.userDir+StringUtils.regexName);
+			this.md5hash = calculateMd5(StringUtils.userDir+StringUtils.regexName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			mStdErr.println("calculateMd5:" + e.getMessage());
@@ -113,42 +114,27 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	}
 	
 	
-	public byte[] calculateMd5(String file) throws NoSuchAlgorithmException, IOException {
+	public String calculateMd5(String file) throws NoSuchAlgorithmException, IOException {
 		
 		MessageDigest md = MessageDigest.getInstance("MD5");
-		InputStream is = Files.newInputStream(Paths.get(file));
-		DigestInputStream dis = new DigestInputStream(is, md);
-		return md.digest();
+		md.update(Files.readAllBytes(Paths.get(file)));
+		String retValue = new String(Base64.getEncoder().encode(md.digest()));
+
+		return retValue;
 	}
 	
 	
 	public void checkFileChange() {
-		
 		try {
-			byte[] digest = calculateMd5(StringUtils.userDir+StringUtils.regexName);
-			if (this.md5hash != digest) {
-				generateIssue();
+			String digest = calculateMd5(StringUtils.userDir+StringUtils.regexName);
+			if (!this.md5hash.equals(digest)) {
+				createIssues(StringUtils.userDir+StringUtils.regexName);
+				generateIssuesList();
+				this.md5hash = digest;
 			} 
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-	}
-	
-	
-	public void generateIssue() {
-		try {
-			generateIssuesList();
-			this.md5hash = calculateMd5(StringUtils.userDir+StringUtils.regexName);
 		} catch (Exception e) {
-			// TODO: handle exception
-			mStdErr.println(StringUtils.error_1 + StringUtils.userDir);
+			// TODO Auto-generated catch block
+			mStdErr.println(e.getMessage());
 		}
 	}
 	
@@ -183,13 +169,13 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
 		// TODO Auto-generated method stub
 		
-		//checkFileChange();
 		
 		if (!this.callbacks.isInScope(helpers.analyzeRequest(baseRequestResponse).getUrl())) {
 			return null;
 		}
 
-		
+		checkFileChange();
+	
 		if (this.passiveIssues.size() == 0) {
 			mStdErr.println(StringUtils.errorEmptyIssueList);
 			return null;
@@ -209,11 +195,12 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 	public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse,
 			IScannerInsertionPoint insertionPoint) {
 		
-		//checkFileChange();
 		
 		if (!this.callbacks.isInScope(helpers.analyzeRequest(baseRequestResponse).getUrl())) {
 			return null;
 		}
+		
+		checkFileChange();
 		
 		if (this.activeIssues.size() == 0) {
 			mStdErr.println(StringUtils.errorEmptyIssueList);
