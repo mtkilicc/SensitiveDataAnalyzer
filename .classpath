@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_211]"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/Java">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/runnable"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/muhammed/Desktop/Pentest/Tools/Burp/Eclipse_Jar/org.json.jar"/>
-	<classpathentry kind="lib" path="/Users/muhammed/Desktop/Pentest/Tools/Burp/Eclipse_Jar/sqlite-jdbc-3.36.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/m.kilic/Desktop/Java_Libraries/org.json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/m.kilic/Desktop/Java_Libraries/sqlite-jdbc-3.36.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/m.kilic/Desktop/Java_Libraries/burpsuite_community_v1.7.36.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

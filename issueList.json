@@ -44,6 +44,14 @@
             "Regex": "--- End of inner exception stack trace ---",
             "ScanType": "Active",
             "Severity": "Low"
+        },   {
+            "Confidence": "Firm",
+            "Description": "Transaction ID found",
+            "Name": "TID",
+            "Payload": "heretrytest%0012345",
+            "Regex": "transactionId",
+            "ScanType": "Active",
+            "Severity": "Low"
         }
     ]
 }

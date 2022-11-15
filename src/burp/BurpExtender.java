@@ -29,11 +29,16 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 
 
     public static void main(String[] args) {
-    	
+    	 /*
+    	  * Running burp suite from eclipse ide
+    	  */
+    	//burp.StartBurp.main(args);
+		 
     }
     
 	
 	public void registerExtenderCallbacks(IBurpExtenderCallbacks paramIBurpExtenderCallbacks) {
+		//burp.StartBurp.main();
 		this.callbacks = paramIBurpExtenderCallbacks;
 		this.helpers = paramIBurpExtenderCallbacks.getHelpers();
 		paramIBurpExtenderCallbacks.setExtensionName("Sensitive Data Analyzer");
@@ -226,7 +231,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck {
 		                baseRequestResponse.getHttpService(), checkRequest);
 				List<Issue> control = new ArrayList<>();
 				control.add(activeIssues.get(i));
-				issues.addAll(findIssues(baseRequestResponse,control));
+				issues.addAll(findIssues(checkRequestResponse,control));
 			}
 			if (issues.size() > 0) {
 				return issues;
