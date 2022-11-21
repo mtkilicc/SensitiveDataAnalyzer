@@ -4,40 +4,41 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class DbUtils {
+	
+	private StringUtils strUtil = new StringUtils();
 	
 	
     private Connection connect() throws SQLException {
         Connection conn = null;
-        conn = DriverManager.getConnection("jdbc:sqlite:"+StringUtils.userDir+"/"+StringUtils.dbName);
+        conn = DriverManager.getConnection("jdbc:sqlite:"+strUtil.userDir+"/"+strUtil.dbName);
         return conn;
     }
 	
+    
 	public void generateDB() throws SQLException {
 		Connection conn = connect();
 	    Statement stmt  = conn.createStatement();
-	    stmt.execute(StringUtils.createTable); 
+	    stmt.execute(strUtil.createTable); 
 	}
+	
 	
 	public void insertValue(String insertData, String insertName, PrintWriter mStdErr) throws SQLException {
 		 Connection conn = connect();
          Statement stmt  = conn.createStatement();
-         ResultSet resultQuery  = stmt.executeQuery(StringUtils.checkName.replace("_replace_",insertName)); 
-        
+         ResultSet resultQuery  = stmt.executeQuery(strUtil.checkName.replace("_replace_",insertName)); 
          if (!resultQuery.next()) {
            	 stmt.execute(insertData); 
 
          } else {
-        	 mStdErr.println(StringUtils.errorDuplicateIssueName+"\t"+insertName);
+        	 mStdErr.println(strUtil.errorDuplicateIssueName+"\t"+insertName);
          }
-         
          resultQuery.close();
       	 stmt.close();
 	}
 	
+	
 	public List<String[]> getIssues(String issueType) throws SQLException {
-		
 		Connection conn = connect();
         Statement stmt  = conn.createStatement();
         ResultSet resultQuery  = null; 
@@ -45,23 +46,28 @@ public class DbUtils {
         String[] resultArray;
         switch (issueType) {
 		case "Passive":
-			resultQuery = stmt.executeQuery(StringUtils.getPassiveIssues);
+			resultQuery = stmt.executeQuery(strUtil.getPassiveIssues);
 			break;
 		case "Active":
-			resultQuery = stmt.executeQuery(StringUtils.getActiveIssues);
+			resultQuery = stmt.executeQuery(strUtil.getActiveIssues);
 			break;
-		
 		}     
         while (resultQuery.next()) {
         	resultArray  = new String[7];
-        	for (int i = 0; i < StringUtils.jsonVariables.length; i++) {
-        		resultArray[i] = resultQuery.getString(StringUtils.jsonVariables[i]);
+        	for (int i = 0; i < strUtil.jsonVariables.length; i++) {
+        		resultArray[i] = resultQuery.getString(strUtil.jsonVariables[i]);
 			}
         	resultList.add(resultArray);
         }
-        
         return resultList;
 	}
 	
+	
+	public void removeIssuteTable() throws SQLException {
+		Connection conn = connect();
+	    Statement stmt  = conn.createStatement();
+	    stmt.execute(strUtil.removeIssues);
+	    stmt.execute(strUtil.createTable);
+	}
 
 }

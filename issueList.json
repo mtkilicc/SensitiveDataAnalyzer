@@ -3,7 +3,7 @@
         {
             "Confidence": "Certain",
             "Description": "Applications sometimes disclose sensitive financial information such as credit card numbers.",
-            "Name": "Credit Card Information",
+            "Name": "Credit Card Information-Passive",
             "Payload": "",
             "Regex": "(5[1-5][0-9]{14})",
             "ScanType": "Passive",
@@ -12,43 +12,71 @@
         {
             "Confidence": "Firm",
             "Description": "Applications may use Oracle Database and the response has error message which is related Oracle Databases.",
-            "Name": "Oracle Databases Error",
+            "Name": "Oracle Databases Error-Passive",
             "Payload": "",
             "Regex": "ORA-([0-9]*[0-9])",
             "ScanType": "Passive",
             "Severity": "High"
         },
         {
-            "Confidence": "Firm",
-            "Description": "PHP Error Found",
-            "Name": "PHP3",
-            "Payload": "heretrytest%22",
-            "Regex": "\\\\.php:[0-9]+",
+            "Confidence": "Certain",
+            "Description": "ASP.NET Detailed Error Found",
+            "Name": "ASP.Net-Passive",
+            "Payload": "",
+            "Regex": "\"Message\":\"Invalid web service call_split_Exception of type_split_--- End of inner exception stack trace ---_split_Syntax error in string in query expression",
+            "ScanType": "Passive",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Certain",
+            "Description": "Java Detailed Error Found",
+            "Name": "Java-Passive",
+            "Payload": "",
+            "Regex": "\\\\.java:[0-9]++_split_nested exception is_split_\\\\.lang\\\\.([A-Za-z0-9_]+)Exception_split_\\\\.lang\\\\.([A-Za-z0-9_])+\\\\.([A-Za-z0-9_]+)Exception",
+            "ScanType": "Passive",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Certain",
+            "Description": "PHP Detailed Error Found",
+            "Name": "PHP-Passive",
+            "Payload": "",
+            "Regex": "\\\\.php on line [0-9]+_split_\\\\.php</b> on line <b>[0-9]_split_Fatal error:_split_\\\\.php:[0-9]+",
+            "ScanType": "Passive",
+            "Severity": "Low"
+        },
+        {
+            "Confidence": "Certain",
+            "Description": "ASP.NET Detailed Error Found",
+            "Name": "ASP.Net-Active",
+            "Payload": "extentiondata%00_split_extentiondata<script>",
+            "Regex": "\"Message\":\"Invalid web service call_split_Exception of type_split_--- End of inner exception stack trace ---_split_Syntax error in string in query expression",
             "ScanType": "Active",
             "Severity": "Low"
         },
         {
-            "Confidence": "Firm",
-            "Description": "PHP Error Found",
-            "Name": "PHP2",
-            "Payload": "heretrytest%00",
-            "Regex": "Fatal error:",
+            "Confidence": "Certain",
+            "Description": "Java Detailed Error Found",
+            "Name": "Java-Active",
+            "Payload": "extentiondata><\"%00_split_extentiondata><\"%00%0a%1c<script>",
+            "Regex": "\\\\.java:[0-9]++_split_nested exception is_split_\\\\.lang\\\\.([A-Za-z0-9_]+)Exception_split_\\\\.lang\\\\.([A-Za-z0-9_])+\\\\.([A-Za-z0-9_]+)Exception",
             "ScanType": "Active",
             "Severity": "Low"
         },
         {
-            "Confidence": "Firm",
-            "Description": "ASP.NET Error Found",
-            "Name": "ASP.NET3",
-            "Payload": "heretrytest%22",
-            "Regex": "--- End of inner exception stack trace ---",
+            "Confidence": "Certain",
+            "Description": "PHP Detailed Error Found",
+            "Name": "PHP-Active",
+            "Payload": "extentiondata%00_split_extentiondata\"_split_extentiondata%00\"<script>",
+            "Regex": "\\\\.php on line [0-9]+_split_\\\\.php</b> on line <b>[0-9]_split_Fatal error:_split_\\\\.php:[0-9]+",
             "ScanType": "Active",
             "Severity": "Low"
-        },   {
+        },
+        {
             "Confidence": "Firm",
             "Description": "Transaction ID found",
             "Name": "TID",
-            "Payload": "heretrytest%0012345",
+            "Payload": "extentiondata%001001",
             "Regex": "transactionId",
             "ScanType": "Active",
             "Severity": "Low"
