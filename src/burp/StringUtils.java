@@ -9,9 +9,11 @@ public class StringUtils {
 	/*
 	 General Strings 
 	 */
-	public String userDir = System.getProperty("user.dir");
+	public String userDir = System.getProperty("user.home");
 	public String dbName = "storage.db";
-	public String fileName = "/issueList.json";
+	public String dbPath = userDir+"/SensitiveDataAnalyzer/"+dbName;
+	public String fileName = "issueList.json";
+	public String filePath = userDir+"/SensitiveDataAnalyzer/"+fileName;
 	public String createTable = "CREATE TABLE IF NOT EXISTS issues(scantype TEXT NOT NULL,payload TEXT NOT NULL,regex TEXT NOT NULL,name TEXT NOT NULL UNIQUE,description TEXT NOT NULL,severity TEXT NOT NULL,confidence TEXT NOT NULL);";
 	public String addIssue = "INSERT INTO issues VALUES(_replace_);";
 	public String checkName =  "SELECT name FROM issues WHERE name=\"_replace_\";";
@@ -24,9 +26,9 @@ public class StringUtils {
 	 */
 	public String createAutoInfo = "storage.db has created.\nIssues has inserted in to the db.\nIssue's List has created.\n\nReady to running...";
 	public String createAutoHeader = "Create Auto: ";
-	public String createDBInfo = "storage.db has created.\n\nNext step is 'Load Issue's List or Select File'...";
+	public String createDBInfo = "storage.db has created.\n\nPath is:"+dbPath+"\n\nNext step is 'Load Issue's List or Select File'...";
 	public String createDBHeader = "Create DB";
-	public String loadIssueInfo = "IssueList.json has loaded.\n\nNext step is 'Generate Isssue's List'...";
+	public String loadIssueInfo = "IssueList.json has loaded.\n\nPath is:"+filePath+"\n\nNext step is 'Generate Isssue's List'...";
 	public String loadIssueHeader = "Load Issue";
 	public String selectFileInfo = "Selected file has loaded.\n\nNext step is 'Generate Isssue's List'...\n\n File Path: ";
 	public String selectFileHeader = "Select File";

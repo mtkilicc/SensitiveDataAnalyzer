@@ -40,7 +40,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck,ITab {
 		/*
 		 * Running burp suite from eclipse ide
 		 */
-		//burp.StartBurp.main(args);
+		burp.StartBurp.main(args);
 
 	}
 
@@ -102,7 +102,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck,ITab {
 						// TODO Auto-generated method stub
 						try {
 							dbRunner.generateDB();
-							createIssues(strUtil.userDir+strUtil.fileName, mStdErr);
+							createIssues(strUtil.filePath, mStdErr);
 							generateIssuesList();
 							JOptionPane.showMessageDialog(null, strUtil.createAutoInfo, strUtil.createAutoHeader, JOptionPane.INFORMATION_MESSAGE);
 						} catch (Exception e1) {
@@ -138,7 +138,7 @@ public class BurpExtender implements IBurpExtender,IScannerCheck,ITab {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						try {
-							createIssues(strUtil.userDir+strUtil.fileName, mStdErr);
+							createIssues(strUtil.filePath, mStdErr);
 							JOptionPane.showMessageDialog(null, strUtil.loadIssueInfo, strUtil.loadIssueHeader, JOptionPane.INFORMATION_MESSAGE);
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block

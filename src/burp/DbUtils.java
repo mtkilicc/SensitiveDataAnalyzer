@@ -1,5 +1,6 @@
 package burp;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +12,11 @@ public class DbUtils {
 	
     private Connection connect() throws SQLException {
         Connection conn = null;
-        conn = DriverManager.getConnection("jdbc:sqlite:"+strUtil.userDir+"/"+strUtil.dbName);
+        File theDir = new File(strUtil.userDir+"/SensitiveDataAnalyzer/");
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
+        conn = DriverManager.getConnection("jdbc:sqlite:"+strUtil.dbPath);
         return conn;
     }
 	
